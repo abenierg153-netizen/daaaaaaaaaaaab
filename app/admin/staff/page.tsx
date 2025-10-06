@@ -45,7 +45,18 @@ export default function StaffPage() {
         .eq('role', 'staff')
         .order('created_at', { ascending: false })
       
-      setStaff(data || [])
+      setStaff((data || []).map((member: any) => ({
+        ...member,
+        permissions: member.staff_permissions?.[0] || {
+          can_view_appointments: false,
+          can_edit_appointments: false,
+          can_view_patients: false,
+          can_edit_patients: false,
+          can_view_calendar: false,
+          can_view_reports: false,
+          can_view_billing: false,
+        }
+      })))
     } catch (error) {
       console.error('Error loading staff:', error)
     } finally {

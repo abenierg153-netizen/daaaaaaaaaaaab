@@ -1,4 +1,4 @@
-// scripts/verify-login.ts
+﻿// scripts/verify-login.ts
 import { createClient } from '@supabase/supabase-js'
 import { config } from 'dotenv'
 

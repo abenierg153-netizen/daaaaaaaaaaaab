@@ -135,7 +135,7 @@ async function seed() {
 
     const { data: createdDentists, error: dentistsError } = await supabase
       .from('dentists')
-      .insert(dentists)
+      .insert(dentists as any)
       .select();
 
     if (dentistsError) throw dentistsError;
@@ -184,7 +184,7 @@ async function seed() {
 
     const { data: createdServices, error: servicesError } = await supabase
       .from('services')
-      .insert(services)
+      .insert(services as any)
       .select();
 
     if (servicesError) throw servicesError;
@@ -200,7 +200,7 @@ async function seed() {
       { email: 'patient5@example.com', name: 'Helen Tadesse' },
     ];
 
-    const createdPatients = [];
+    const createdPatients: any[] = [];
     for (const { email, name } of patientEmails) {
       const { data: patientUser, error: patientUserError } = await supabase.auth.admin.createUser({
         email,
@@ -220,7 +220,7 @@ async function seed() {
           email,
           date_of_birth: new Date(1990 + Math.floor(Math.random() * 20), Math.floor(Math.random() * 12), 1 + Math.floor(Math.random() * 28)).toISOString().split('T')[0],
           notes: 'Initial patient record',
-        })
+        } as any)
         .select()
         .single();
 
@@ -242,8 +242,8 @@ async function seed() {
 
       appointments.push({
         patient_id: createdPatients[i % createdPatients.length]!.id,
-        dentist_id: createdDentists![i % createdDentists!.length]!.id,
-        service_id: createdServices![i % createdServices!.length]!.id,
+        dentist_id: (createdDentists as any)![i % (createdDentists as any)!.length]!.id,
+        service_id: (createdServices as any)![i % (createdServices as any)!.length]!.id,
         starts_at: appointmentDate.toISOString(),
         status: daysOffset < 0 ? 'completed' : 'scheduled',
         notes: `Appointment ${i + 1}`,
@@ -253,7 +253,7 @@ async function seed() {
 
     const { data: createdAppointments, error: appointmentsError } = await supabase
       .from('appointments')
-      .insert(appointments)
+      .insert(appointments as any)
       .select();
 
     if (appointmentsError) throw appointmentsError;
@@ -261,20 +261,20 @@ async function seed() {
 
     // Create reminders for future appointments
     console.log('\n⏰ Creating reminders...');
-    const futureAppointments = createdAppointments?.filter(apt => apt.status === 'scheduled') || [];
+    const futureAppointments = (createdAppointments as any)?.filter((apt: any) => apt.status === 'scheduled') || [];
     const reminders = [];
     
     for (const apt of futureAppointments) {
       reminders.push(
-        { appointment_id: apt.id, type: '24h' as const, status: 'pending' as const },
-        { appointment_id: apt.id, type: '2h' as const, status: 'pending' as const }
+        { appointment_id: (apt as any).id, type: '24h' as const, status: 'pending' as const },
+        { appointment_id: (apt as any).id, type: '2h' as const, status: 'pending' as const }
       );
     }
 
     if (reminders.length > 0) {
       const { error: remindersError } = await supabase
         .from('reminders')
-        .insert(reminders);
+        .insert(reminders as any);
 
       if (remindersError) throw remindersError;
       console.log(`✅ Created ${reminders.length} reminders`);

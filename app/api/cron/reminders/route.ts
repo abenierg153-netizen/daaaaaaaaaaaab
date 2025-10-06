@@ -65,7 +65,7 @@ export async function GET(request: Request) {
       skipped: 0,
     };
 
-    for (const reminder of reminders || []) {
+    for (const reminder of (reminders || []) as any[]) {
       try {
         const appointment = reminder.appointments as any;
         
@@ -120,7 +120,7 @@ export async function GET(request: Request) {
         }
 
         // Mark as sent
-        await supabase
+        await (supabase as any)
           .from('reminders')
           .update({
             status: 'sent',
@@ -142,7 +142,7 @@ export async function GET(request: Request) {
         const delayMinutes = delays[retryCount] || 1440;
         const nextRetryAt = new Date(now.getTime() + delayMinutes * 60 * 1000);
 
-        await supabase
+        await (supabase as any)
           .from('reminders')
           .update({
             status: 'failed',

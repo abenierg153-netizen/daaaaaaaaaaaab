@@ -1,10 +1,10 @@
 import { createServerClient } from '@/lib/supabase/server'
 import { getAuditLogs } from '@/app/admin/actions/get-audit-logs'
 import StatsCards from '@/components/admin/stats-cards'
-import ActivityFeed from '@/components/admin/activity-feed'
+import { ActivityFeed } from '@/components/admin/activity-feed'
 
 export default async function AdminDashboard() {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
   
   // Get stats
   const [patientsResult, dentistsResult, appointmentsResult, staffResult] = await Promise.all([

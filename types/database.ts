@@ -1,4 +1,4 @@
-import type { Database } from '@/types/database';
+// Database types for Supabase
 
 export type Json =
   | string

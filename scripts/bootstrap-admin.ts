@@ -1,5 +1,10 @@
-// scripts/bootstrap-admin.ts
+﻿// scripts/bootstrap-admin.ts
 import { bootstrapAdmin } from '../app/admin/actions/bootstrap-admin'
+import { config } from 'dotenv'
+
+// Load environment variables
+config({ path: '.env.local' })
+config({ path: '.env.server' })
 
 bootstrapAdmin()
   .then((res) => {

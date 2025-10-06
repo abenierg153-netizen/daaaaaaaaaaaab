@@ -4,7 +4,7 @@ import type { AuditLog } from '@/lib/types/admin'
 
 export async function getAuditLogs(limit: number = 10): Promise<AuditLog[]> {
   try {
-    const supabase = createServerClient()
+    const supabase = await createServerClient()
     
     const { data, error } = await supabase
       .from('audit_logs')
@@ -23,7 +23,10 @@ export async function getAuditLogs(limit: number = 10): Promise<AuditLog[]> {
 
     if (error) throw error
 
-    return data || []
+    return (data || []).map((log: any) => ({
+      ...log,
+      user_profiles: log.user_profiles?.[0] || { full_name: 'Unknown', email: '' }
+    }))
   } catch (error) {
     console.error('Get audit logs error:', error)
     return []

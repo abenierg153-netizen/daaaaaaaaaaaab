@@ -4,7 +4,7 @@ import AdminSidebar from '@/components/admin/sidebar'
 import MobileBottomNav from '@/components/admin/mobile-bottom-nav'
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const supabase = createServerClient()
+  const supabase = await createServerClient()
   
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
